@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5534802D273EFA5300943B01 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 5534802C273EFA5300943B01 /* main.c */; };
+		55348036273EFA6E00943B01 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55348035273EFA6E00943B01 /* CoreFoundation.framework */; };
+		55348039273EFACE00943B01 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55348038273EFACE00943B01 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		55348029273EFA5300943B01 /* centripedal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = centripedal; sourceTree = BUILT_PRODUCTS_DIR; };
 		5534802C273EFA5300943B01 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		55348035273EFA6E00943B01 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		55348038273EFACE00943B01 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +36,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55348039273EFACE00943B01 /* CoreGraphics.framework in Frameworks */,
+				55348036273EFA6E00943B01 /* CoreFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +49,7 @@
 			children = (
 				5534802B273EFA5300943B01 /* centripedal */,
 				5534802A273EFA5300943B01 /* Products */,
+				55348034273EFA6E00943B01 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +67,15 @@
 				5534802C273EFA5300943B01 /* main.c */,
 			);
 			path = centripedal;
+			sourceTree = "<group>";
+		};
+		55348034273EFA6E00943B01 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				55348038273EFACE00943B01 /* CoreGraphics.framework */,
+				55348035273EFA6E00943B01 /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
