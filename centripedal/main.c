@@ -57,7 +57,7 @@ CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventT
 
         if (*state) {
             if (debug) fprintf(stderr, "Modifying flags!!\n");
-            if (dry_run) CGEventSetFlags(event, flags | *state);
+            if (!dry_run) CGEventSetFlags(event, flags | *state);
         }
 
     }
