@@ -1,4 +1,4 @@
-// -*- mode: c; c-basic-offset: 4; -*-
+// -*- mode: c; c-basic-offset: 4; compilation-scroll-output: t; compile-command: "xcodebuild"-*-
 //
 //  main.c
 //  centripedal
