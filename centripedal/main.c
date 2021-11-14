@@ -35,15 +35,12 @@ const struct option options[] = {
 };
 
 void describe(char *msg, CGEventFlags state) {
-    fprintf(stderr, "%s: %d, %d, %d\n", msg,
-            !!(state & kCGEventFlagMaskControl),
-            !!(state & kCGEventFlagMaskAlternate),
-            !!(state & kCGEventFlagMaskCommand));
+    fprintf(stderr, "%s: %d, %d, %d\n", msg, !!(state & kCGEventFlagMaskControl), !!(state & kCGEventFlagMaskAlternate), !!(state & kCGEventFlagMaskCommand));
 }
 
 CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventType type, CGEventRef event, void *info) {
     CGEventFlags *state = (CGEventFlags *)info;
-    const CGEventFlags flags = CGEventGetFlags(event);
+    CGEventFlags flags = CGEventGetFlags(event);
     if (type == kCGEventFlagsChanged) {
         if (debug) describe("before", *state);
         *state = flags & (kCGEventFlagMaskControl | kCGEventFlagMaskAlternate | kCGEventFlagMaskCommand);
@@ -54,10 +51,12 @@ CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventT
         CFTimeInterval since = CGEventSourceSecondsSinceLastEventType(kCGEventSourceStateCombinedSessionState,
                                                                       kCGEventFlagsChanged);
         if (since > cooldown) {
-            if (debug) fputs("Resetting flags", stderr);
+            if (debug) fprintf(stderr, "Resetting flags!!\n");
             *state = 0;
-        } else if (*state) {
-            if (debug) fputs("Modifying flags!", stderr);
+        }
+
+        if (*state) {
+            if (debug) fprintf(stderr, "Modifying flags!!\n");
             if (!dry_run) CGEventSetFlags(event, flags | *state);
         }
 
@@ -68,11 +67,11 @@ CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventT
 int main(int argc, char * const * argv) {
     while (getopt_long(argc, argv, "", options, NULL) != -1);
     if (help) {
-        puts("Usage: centripedal [--debug] [--dry-run]");
+        printf("Usage: centripedal [--debug] [--dry-run]\n");
         return 0;
     }
 
-    if (debug) fputs("Booting up…", stderr);
+    if (debug) printf("Booting up…\n");
 
     CGEventFlags pressedModifierKeys = 0;
     CFMachPortRef tap = CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap,
@@ -80,15 +79,15 @@ int main(int argc, char * const * argv) {
                                          CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged),
                                          pedalCallback, &pressedModifierKeys);
     if (tap == NULL) {
-        fputs("couldn't create tap, may need accessibility privileges?", stderr);
+        fprintf(stderr, "couldn't create tap, may need accessibility privileges?\n");
         exit(EXIT_FAILURE);
     } else if (debug) {
-        fputs("tap created", stderr);
+        fprintf(stderr, "tap created\n");
     }
 
     CFRunLoopSourceRef source = CFMachPortCreateRunLoopSource(NULL, tap, 0);
     if (source == NULL) {
-        fputs("Couldn't create runloop source", stderr);
+        fprintf(stderr, "Couldn't create runloop source");
         exit(EXIT_FAILURE);
     }
 
