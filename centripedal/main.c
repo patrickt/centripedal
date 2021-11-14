@@ -51,12 +51,10 @@ CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventT
         CFTimeInterval since = CGEventSourceSecondsSinceLastEventType(kCGEventSourceStateCombinedSessionState,
                                                                       kCGEventFlagsChanged);
         if (since > cooldown) {
-            if (debug) fprintf(stderr, "Resetting flags!!\n");
+            if (debug) fprintf(stderr, "Resetting flags\n");
             *state = 0;
-        }
-
-        if (*state) {
-            if (debug) fprintf(stderr, "Modifying flags!!\n");
+        } else if (*state) {
+            if (debug) fprintf(stderr, "Modifying flags\n");
             if (!dry_run) CGEventSetFlags(event, flags | *state);
         }
 
@@ -67,11 +65,11 @@ CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventT
 int main(int argc, char * const * argv) {
     while (getopt_long(argc, argv, "", options, NULL) != -1);
     if (help) {
-        printf("Usage: centripedal [--debug] [--dry-run]\n");
+        puts("Usage: centripedal [--debug] [--dry-run]");
         return 0;
     }
 
-    if (debug) printf("Booting up…\n");
+    if (debug) fprintf(stderr, "Booting up…\n");
 
     CGEventFlags pressedModifierKeys = 0;
     CFMachPortRef tap = CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap,
@@ -80,7 +78,7 @@ int main(int argc, char * const * argv) {
                                          pedalCallback, &pressedModifierKeys);
     if (tap == NULL) {
         fprintf(stderr, "couldn't create tap, may need accessibility privileges?\n");
-        exit(EXIT_FAILURE);
+        abort();
     } else if (debug) {
         fprintf(stderr, "tap created\n");
     }
@@ -88,7 +86,7 @@ int main(int argc, char * const * argv) {
     CFRunLoopSourceRef source = CFMachPortCreateRunLoopSource(NULL, tap, 0);
     if (source == NULL) {
         fprintf(stderr, "Couldn't create runloop source");
-        exit(EXIT_FAILURE);
+        abort();
     }
 
     CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopCommonModes);
