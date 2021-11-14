@@ -31,6 +31,11 @@ CGEventRef pedalCallback(CGEventTapProxy proxy __attribute__((unused)), CGEventT
         state->pedal_cmd_down = !state->pedal_cmd_down && cmdOn;
         printf("after: %d, %d, %d\n", state->pedal_ctrl_down, state->pedal_alt_down, state->pedal_cmd_down);
     } else if (type == kCGEventKeyDown) {
+        CFTimeInterval since = CGEventSourceSecondsSinceLastEventType(kCGEventSourceStateCombinedSessionState, kCGEventFlagsChanged);
+        if (since > 5.0) {
+            memset(state, 0, sizeof(struct kb_state));
+        }
+
         CGEventFlags newflags = flags;
         if (state->pedal_ctrl_down)
             newflags |= kCGEventFlagMaskControl;
@@ -77,10 +82,6 @@ int main() {
     }
 
     CFRunLoopAddSource(runloop, source, kCFRunLoopCommonModes);
-
-    atexit_b(^{
-        printf("Done executing\n");
-    });
 
     CFRunLoopRun();
     CFRelease(source);
